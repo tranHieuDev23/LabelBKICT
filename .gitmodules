@@ -1,0 +1,21 @@
+[submodule "LabelBKICT_ExportService"]
+	path = LabelBKICT_ExportService
+	url = https://github.com/tranHieuDev23/LabelBKICT_ExportService.git
+[submodule "LabelBKICT_UserService"]
+	path = LabelBKICT_UserService
+	url = https://github.com/tranHieuDev23/LabelBKICT_UserService.git
+[submodule "LabelBKICT_ImageService"]
+	path = LabelBKICT_ImageService
+	url = https://github.com/tranHieuDev23/LabelBKICT_ImageService.git
+[submodule "LabelBKICT_Gateway"]
+	path = LabelBKICT_Gateway
+	url = https://github.com/tranHieuDev23/LabelBKICT_Gateway.git
+[submodule "LabelBKICT_WebUI"]
+	path = LabelBKICT_WebUI
+	url = https://github.com/tranHieuDev23/LabelBKICT_WebUI.git
+[submodule "LabelBKICT_ModelService"]
+	path = LabelBKICT_ModelService
+	url = https://github.com/tranHieuDev23/LabelBKICT_ModelService.git
+[submodule "LabelBKICT_PinPageService"]
+	path = LabelBKICT_PinPageService
+	url = https://github.com/tranHieuDev23/LabelBKICT_PinPageService.git

@@ -1,0 +1,7 @@
+config/*.env
+db-data
+elasticsearch-data
+elk-data
+minio-data
+zookeeper-data
+kafka-data

@@ -1,0 +1,160 @@
+version: "3"
+services:
+  user_service_db:
+    image: 'postgres:14.2-bullseye'
+    env_file:
+      - ../config/.user_service_db.env
+    restart: always
+    volumes:
+      - ../db-data/user_service:/var/lib/postgresql/data
+  image_service_db:
+    image: 'postgres:14.2-bullseye'
+    env_file:
+      - ../config/.image_service_db.env
+    restart: always
+    volumes:
+      - ../db-data/image_service:/var/lib/postgresql/data
+  export_service_db:
+    image: 'postgres:14.2-bullseye'
+    env_file:
+      - ../config/.export_service_db.env
+    restart: always
+    volumes:
+      - ../db-data/export_service:/var/lib/postgresql/data
+  model_service_db:
+    image: 'postgres:14.2-bullseye'
+    env_file:
+      - ../config/.model_service_db.env
+    restart: always
+    volumes:
+      - ../db-data/model_service:/var/lib/postgresql/data
+  pin_page_service_db:
+    image: 'postgres:14.2-bullseye'
+    env_file:
+      - ../config/.pin_page_service_db.env
+    restart: always
+    volumes:
+      - ../db-data/pin_page_service:/var/lib/postgresql/data
+  zookeeper:
+    image: 'bitnami/zookeeper:3.8-debian-10'
+    env_file:
+      - ../config/.zookeeper.env
+    restart: always
+    volumes:
+      - ../zookeeper-data:/bitnami/zookeeper
+  kafka:
+    image: 'bitnami/kafka:3.1-debian-10'
+    env_file:
+      - ../config/.kafka.env
+    depends_on:
+      - zookeeper
+    restart: always
+    volumes:
+      - ../kafka-data:/bitnami/kafka
+  elasticsearch-setup:
+    build: ./elasticsearch-setup
+    env_file:
+      - ../config/.elasticsearch.env
+  elasticsearch:
+    build: ./elasticsearch
+    env_file:
+      - ../config/.elasticsearch.env
+    volumes:
+      - ../elasticsearch-data:/usr/share/elasticsearch/data
+    depends_on:
+      - elasticsearch-setup
+    restart: always
+  kibana:
+    image: kibana:8.4.3
+    env_file:
+      - ../config/.kibana.env
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    restart: always
+  minio:
+    image: minio/minio
+    ports:
+      - "9001:9001"
+    command: server /data --address "0.0.0.0:9000" --console-address "0.0.0.0:9001"
+    env_file:
+      - ../config/.minio.env
+    restart: always
+    volumes:
+      - ../minio-data:/data
+  web_ui:
+    build: ../LabelBKICT_WebUI
+    ports: 
+      - '8888:80'
+    env_file:
+      - ../config/.web_ui.env
+    depends_on:
+      - gateway
+      - kibana
+      - minio
+    restart: always
+  gateway:
+    build: ../LabelBKICT_Gateway
+    env_file:
+      - ../config/.gateway.env
+    depends_on:
+      - user_service
+      - image_service
+      - export_service
+      - elasticsearch
+      - minio
+    restart: always
+  user_service:
+    build: ../LabelBKICT_UserService
+    env_file:
+      - ../config/.user_service.env
+    depends_on:
+      - user_service_db
+      - elasticsearch
+    restart: always
+  image_service:
+    build: ../LabelBKICT_ImageService
+    env_file:
+      - ../config/.image_service.env
+    depends_on:
+      - image_service_db
+      - kafka
+      - elasticsearch
+      - minio
+    restart: always
+  export_service:
+    build: ../LabelBKICT_ExportService
+    env_file:
+      - ../config/.export_service.env
+    depends_on:
+      - export_service_db
+      - kafka
+      - user_service
+      - image_service
+      - elasticsearch
+      - minio
+    restart: always
+  model_service:
+    build: ../LabelBKICT_ModelService
+    env_file:
+      - ../config/.model_service.env
+    depends_on:
+      - model_service_db
+      - kafka
+      - image_service
+      - elasticsearch
+      - minio
+    restart: always
+  pin_page_service:
+    build: ../LabelBKICT_PinPageService
+    env_file:
+      - ../config/.pin_page_service.env
+    depends_on:
+      - pin_page_service_db
+      - elasticsearch
+      - minio
+    restart: always
+networks:
+  default:
+    name: polyplabeler
