@@ -7,6 +7,13 @@ services:
     restart: always
     volumes:
       - ../db-data/user_service:/var/lib/postgresql/data
+  user_service_db_backup:
+    image: 'tranhieu23/db-backup:14.2-bullseye'
+    env_file:
+      - ../config/.user_service_db_backup.env
+    restart: always
+    volumes:
+      - ../config/label_bkict_rsa.key:/data/ssh/label_bkict_rsa.key
   image_service_db:
     image: 'postgres:14.2-bullseye'
     env_file:
@@ -14,6 +21,13 @@ services:
     restart: always
     volumes:
       - ../db-data/image_service:/var/lib/postgresql/data
+  image_service_db_backup:
+    image: 'tranhieu23/db-backup:14.2-bullseye'
+    env_file:
+      - ../config/.image_service_db_backup.env
+    restart: always
+    volumes:
+      - ../config/label_bkict_rsa.key:/data/ssh/label_bkict_rsa.key
   export_service_db:
     image: 'postgres:14.2-bullseye'
     env_file:
@@ -21,6 +35,13 @@ services:
     restart: always
     volumes:
       - ../db-data/export_service:/var/lib/postgresql/data
+  export_service_db_backup:
+    image: 'tranhieu23/db-backup:14.2-bullseye'
+    env_file:
+      - ../config/.export_service_db_backup.env
+    restart: always
+    volumes:
+      - ../config/label_bkict_rsa.key:/data/ssh/label_bkict_rsa.key
   model_service_db:
     image: 'postgres:14.2-bullseye'
     env_file:
@@ -28,6 +49,13 @@ services:
     restart: always
     volumes:
       - ../db-data/model_service:/var/lib/postgresql/data
+  model_service_db_backup:
+    image: 'tranhieu23/db-backup:14.2-bullseye'
+    env_file:
+      - ../config/.model_service_db_backup.env
+    restart: always
+    volumes:
+      - ../config/label_bkict_rsa.key:/data/ssh/label_bkict_rsa.key
   pin_page_service_db:
     image: 'postgres:14.2-bullseye'
     env_file:
@@ -35,6 +63,13 @@ services:
     restart: always
     volumes:
       - ../db-data/pin_page_service:/var/lib/postgresql/data
+  pin_page_service_db_backup:
+    image: 'tranhieu23/db-backup:14.2-bullseye'
+    env_file:
+      - ../config/.pin_page_service_db_backup.env
+    restart: always
+    volumes:
+      - ../config/label_bkict_rsa.key:/data/ssh/label_bkict_rsa.key
   zookeeper:
     image: 'bitnami/zookeeper:3.8-debian-10'
     env_file:

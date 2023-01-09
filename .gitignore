@@ -1,4 +1,6 @@
 config/*.env
+config/*.key
+config/*.key.pub
 db-data
 elasticsearch-data
 elk-data
