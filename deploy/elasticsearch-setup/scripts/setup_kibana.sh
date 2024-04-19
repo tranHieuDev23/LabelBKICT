@@ -1,1 +1,0 @@
-curl -s -X POST -u elastic:${ELASTIC_PASSWORD} -H "Content-Type: application/json" http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"
