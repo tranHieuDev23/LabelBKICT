@@ -99,7 +99,7 @@ services:
     web_ui:
         build: ../LabelBKICT_WebUI
         ports:
-            - "8888:80"
+            - "9888:80"
         env_file:
             - ../config/.web_ui.env
         depends_on:
